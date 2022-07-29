@@ -47,25 +47,28 @@ module.exports = function toReadable(number) {
             readable = dozens[Math.floor(number / 10)];
         }
     } else if (number >= 100 && number < 1000) {
-        if (number % 100 > 0 && number % 100 < 20) {
-            readable =
-                units[Math.floor(number / 100)] +
-                " hundred " +
-                units[number % 100];
-        } else if (number % 100 >= 20 && number % 10) {
-            readable =
-                units[Math.floor(number / 100)] +
-                " hundred " +
-                dozens[Number(number[1])] +
-                " " +
-                units[Number(number[2])];
-        } else if (number % 100 >= 20 && number % 10 == 0) {
-            readable =
-                units[Math.floor(number / 100)] +
-                " hundred " +
-                dozens[Number(number[1])];
-        } else {
+        let number1 = number - Math.floor(number / 100) * 100;
+
+        if (number1 == 0) {
             readable = units[Math.floor(number / 100)] + " hundred";
+        }
+        if (number1 > 0 && number1 < 20) {
+            readable =
+                units[Math.floor(number / 100)] + " hundred " + units[number1];
+        } else if (number1 >= 20) {
+            if (number1 % 10) {
+                readable =
+                    units[Math.floor(number / 100)] +
+                    " hundred " +
+                    dozens[Math.floor(number1 / 10)] +
+                    " " +
+                    units[number1 % 10];
+            } else {
+                readable =
+                    units[Math.floor(number / 100)] +
+                    " hundred " +
+                    dozens[Math.floor(number1 / 10)];
+            }
         }
     }
     return readable;
